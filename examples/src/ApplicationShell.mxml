@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application implements="appCoreLib.core.IApplicationShell" viewSourceURL="srcview/index.html"
+	layout="vertical"
+	
+	creationComplete="onCreationComplete();"
+	
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:appCoreLib="http://www.appCoreLib.com/2007/mxml">
+	
+	<mx:Script>
+		<![CDATA[
+			import appCoreLib.events.XMLLoadEvent;
+			
+			import mx.controls.Text;
+			import mx.controls.TextArea;
+			import mx.controls.Label;
+			import mx.containers.Box;
+			import mx.controls.Alert;
+			
+			private function onCreationComplete ():void
+			{
+				content.loadXML();
+				settings.loadXML();
+			}
+			
+			private function onXMLLoadSuccess ():void
+			{
+				if (content.isLoaded && settings.isLoaded)
+					shellInitialized();
+			}
+			
+			private function onXMLLoadFailure (evt:XMLLoadEvent):void
+			{
+				Alert.show("failed to load " + evt.target.source + ".  Please try again later", "XML Load Failure");
+			}
+			
+			public function shellInitialized ():void
+			{
+				var s:String = content.getStringValue("test");
+				
+				var lbl:Text = new Text();
+				lbl.width = 300;
+				lbl.height = 300;
+				lbl.htmlText = s;
+				
+				addChild(lbl);
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<appCoreLib:Content id="content" source="xml/content.xml" xmlLoadSuccess="onXMLLoadSuccess();" xmlLoadFailure="onXMLLoadFailure(event);"/>
+	<appCoreLib:Settings id="settings" source="xml/content.xml" xmlLoadSuccess="onXMLLoadSuccess();" xmlLoadFailure="onXMLLoadFailure(event);"/>
+	
+</mx:Application>
