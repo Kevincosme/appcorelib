@@ -14,7 +14,7 @@
 	
 	<strings>
 		<!--string id="">string here</string-->
-		<string id="test"><![CDATA[<p><font size="12">Please make sure your browser is set to allow Pop-up windows before proceeding.</font></p><p></p><p>Click “continue” to pay for your MP3 music files with your credit card or PayPal account. Do not close the new window during the checkout process until you are prompted to do so.  Your MP3s will be available in “My Downloads” under Admin on the right side of your Speakerheart account once the checkout process is complete.</p><p></p><p>If you have any problems, please contact us at <u><a href="mailto:info@speakerheart.com">info@speakerheart.com</a></u></p>]]></string>
+		<string id="test"><![CDATA[<p><font size="12"><b>AppCoreExample</b></font></p><p></p><p>This is an example of how the AppCoreLib works.  It is wonderfully easy to use and is easily scalable.  Don't you just love the convenience methods for accessing template-based xml data?  Its a breeze!</p><p></p><p>If you have any problems, comments, or general questions please contact me at via<u><a href="mailto:jwopitz@gmail.com">email</a></u></p>]]></string>
 	</strings>
 
 	<lists>
