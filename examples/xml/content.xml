@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<content>
+	<urls>
+		<!--url id="">url here</url-->
+	</urls>
+	
+	<modules>
+		<!--module id="">url here</module-->
+	</modules>
+	
+	<swfs>
+		<!--swf id="">url here</swf-->
+	</swfs>
+	
+	<strings>
+		<!--string id="">string here</string-->
+		<string id="test"><![CDATA[<p><font size="12">The XML content and settings have successfully loaded.  Thank you for using AppCoreLib</font></p><p></p><p>This is an example of the appCoreLib.  First the application needs to load content contained within the content.xml file where this string data is stored.  After it has loaded the xml, it fires and XMLLoadEvent.XML_LOAD_SUCCESS where an event handler will see if other depedencies have loaded too.  If not, then it will await those dependencies.  After they have all loaded, then we can fire IApplicationShell.shellInitialized() method which is where the application's view are loaded up and displayed.</p><p></p><p>If you have any problems using AppCoreLib, please contact us at <u><a href="mailto:jwopitz@gmail.com">jwopitz (at) gmail (dot) com</a></u></p>]]></string>
+	</strings>
+
+	<lists>
+		<!--list id="">
+			<listItem label="" data=""/>
+		</list-->
+	</lists>
+			
+</content>

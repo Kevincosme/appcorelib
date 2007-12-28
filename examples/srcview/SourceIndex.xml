@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index>
+	<title>Source of appCoreLib_example</title>
+	<nodes>
+		<node label="xml">
+			<node label="content.xml" url="source/xml/content.xml.txt"/>
+			<node label="settings.xml" url="source/xml/settings.xml.txt"/>
+		</node>
+		<node selected="true" label="ApplicationShell.mxml" icon="mxmlAppIcon" url="source/ApplicationShell.mxml.html"/>
+	</nodes>
+	<zipfile label="Download source (ZIP, 2K)" url="appCoreLib_example.zip"/>
+	<sdklink label="Download Flex 2 SDK" url="http://www.adobe.com/go/flex2_sdk"/>
+</index>
