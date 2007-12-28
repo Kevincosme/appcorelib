@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<settings>
+		<!--setting id="isProduction" type="Boolean">false</setting-->
+	</settings>	
+	<urls>
+		<!--url id="download">url goes here</url-->
+	</urls>
+</config>

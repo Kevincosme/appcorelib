@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<content>
+	<urls>
+		<!--url id="">url here</url-->
+	</urls>
+	
+	<modules>
+		<!--module id="">url here</module-->
+	</modules>
+	
+	<swfs>
+		<!--swf id="">url here</swf-->
+	</swfs>
+	
+	<strings>
+		<!--string id="">string here</string-->
+		<string id="test"><![CDATA[<p><font size="12">Please make sure your browser is set to allow Pop-up windows before proceeding.</font></p><p></p><p>Click “continue” to pay for your MP3 music files with your credit card or PayPal account. Do not close the new window during the checkout process until you are prompted to do so.  Your MP3s will be available in “My Downloads” under Admin on the right side of your Speakerheart account once the checkout process is complete.</p><p></p><p>If you have any problems, please contact us at <u><a href="mailto:info@speakerheart.com">info@speakerheart.com</a></u></p>]]></string>
+	</strings>
+
+	<lists>
+		<!--list id="">
+			<listItem label="" data=""/>
+		</list-->
+	</lists>
+			
+</content>
