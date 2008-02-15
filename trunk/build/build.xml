@@ -19,7 +19,7 @@
 			<!--arg line="-include-sources '${src.dir}/appCoreLib/core/IApplicationShell.as'"/-->
 			<arg line="-namespace ${manifest.uri} ${manifest.xml}"/>
 			<arg line="-include-namespaces ${manifest.uri}"/>
-			<arg line="-include-classes appCoreLib.core.IApplicationShell appCoreLib.events.XMLLoadEvent"/>
+			<arg line="-include-classes appCoreLib.core.IApplicationShell appCoreLib.events.XMLLoadEvent appCoreLib.utils.ObjectUtil"/>
 		</exec>
 	</target>
 	

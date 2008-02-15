@@ -1,3 +1,26 @@
+/*
+
+Copyright (c) 2007 J.W.Opitz, All Rights Reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+*/
 package appCoreLib.utils
 {
 	import flash.utils.describeType;
@@ -10,7 +33,7 @@ package appCoreLib.utils
 			
 			var info:XML = describeType(classInstance);
 			var vars:XMLList = info..variable;
-			var accessor:XMLList = info..accessor;
+			var accessors:XMLList = info..accessor;
 			
 			var propName:String;
 			var propType:String;
@@ -29,7 +52,7 @@ package appCoreLib.utils
 				}
 			}
 			
-			for each (item in accessor)
+			for each (item in accessors)
 			{
 				//ignore readonly
 				if (String(item.@access) == "readonly")
@@ -52,13 +75,13 @@ package appCoreLib.utils
 		{
 			switch (dataType.toLowerCase())
 			{
-				case "int": case "int_8": case "int_16": case "int_32":
+				case "integer": case "int": case "int_8": case "int_16": case "int_32":
 				{
 					var intValue:int = value;
 					return intValue;
 				}
 				
-				case "uint": case "uint_8": case "uint_16": case "uint_32":
+				case "unsigned integer": case "uint": case "uint_8": case "uint_16": case "uint_32":
 				{
 					var uintValue:uint = value;
 					return uintValue;
@@ -74,18 +97,12 @@ package appCoreLib.utils
 				{
 					var booleanValue:Boolean = value;
 					if (String(value).toLowerCase() == "false" || String(value) == "0")
-						booleanValue = false; // handles odd XML casting bug
+						booleanValue = false;
 					
 					if (String(value).toLowerCase() == "true" || String(value) == "1")
-						booleanValue = true; // handles odd XML casting bug
+						booleanValue = true;
 					
 					return booleanValue;
-				}
-				
-				case "string": case "char": case "varchar": case "text":
-				{
-					var stringValue:String = value;
-					return stringValue;
 				}
 				
 				case "array":
@@ -100,9 +117,17 @@ package appCoreLib.utils
 					return xmlValue;
 				}
 				
+				case "object": case "obj":
+				{
+					var objValue:Object = value;
+					return objValue;
+				}
+				
+				case "string": case "char": case "varchar": case "text":
 				default:
 				{
-					return null;
+					var stringValue:String = value;
+					return stringValue;
 				}
 			}
 		}
