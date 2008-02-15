@@ -24,6 +24,7 @@ SOFTWARE.
 package appCoreLib.business
 {
 	import flash.events.Event;
+	import appCoreLib.utils.ObjectUtil;
 	
 	/**
 	 * Settings facilitates access to string values stored in the config.xml.
@@ -62,7 +63,10 @@ package appCoreLib.business
 		public function Settings ()
 		{
 			if (Settings._instance)
+			{
 				throw new Error ("Settings is a Singleton-type class.  Only one instance may be instantiated");
+				return;
+			}
 				
 			Settings._instance = this;
 		}
@@ -87,14 +91,15 @@ package appCoreLib.business
 		 * This is used to access settings for an application.
 		 * 
 		 * @param id The id of the string value located in the config.xml.
-		 * @returns String The setting value stored in the config.xml.  The accesor of this method will need to cast the value to the appropriate data type (if applicable).
+		 * @returns The setting value stored in the config.xml.
 		 */
-		public function getSetting (id:String):String
+		public function getSetting (id:String):*
 		{
 			//assuming that the config.xml is following a similar structure, which it should.
-			var value:String = xml.settings.setting.(@id == id);
+			var type:String = String(xml.settings.setting.(@id == id).@type);
+			var setting:* = xml.settings.setting.(@id == id);
 			
-			return value;
+			return ObjectUtil.customCast(type, setting);
 		}
 	}
 }

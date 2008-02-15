@@ -61,8 +61,11 @@ package appCoreLib.business
 		public function Content ()
 		{
 			if (Content._instance)
+			{
 				throw new Error ("Content is a Singleton-type class.  Only one instance may be instantiated");
-				
+				return;
+			}
+			
 			Content._instance = this;
 		}
 		
