@@ -1,0 +1,16 @@
+#summary AppCoreLib Updates
+#labels Featured,Phase-Support,Phase-Implementation
+
+= Introduction =
+
+Check back here for updates to the AppCoreLib project.
+
+
+= Details =
+
+== update 2008.02.20 ==
+
+Added a new class: ClassUtil.  ClassUtil contains methods to translate generic objects to specific class types.  Hopefully not too many folks have been using ObjectUtil just yet so this should affect very few of you.  If so, you can still continue to use ObjectUtil for awhile until I can finally remove it.
+  
+  * deprecated ObjectUtil (use ClassUtil instead)
+  * added ClassUtil
