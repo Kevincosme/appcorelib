@@ -23,8 +23,9 @@ SOFTWARE.
 */
 package appCoreLib.business
 {
+	import appCoreLib.utils.ClassUtil;
+	
 	import flash.events.Event;
-	import appCoreLib.utils.ObjectUtil;
 	
 	/**
 	 * Settings facilitates access to string values stored in the config.xml.
@@ -99,7 +100,7 @@ package appCoreLib.business
 			var type:String = String(xml.settings.setting.(@id == id).@type);
 			var setting:* = xml.settings.setting.(@id == id);
 			
-			return ObjectUtil.customCast(type, setting);
+			return ClassUtil.customCast(type, setting);
 		}
 	}
 }
