@@ -28,9 +28,19 @@ package appCoreLib.utils
 	
 	/**
 	 * Contains methods for translating various object types to specific class instances and data types.
+	 * 
+	 * <p><b>NOTE</b><br/>In order for complex data types in arrays to correctly translate,
+	 * you need to ensure to add the following to your project's compiler options:
+	 * <em>-keep-as3-metadata ArrayElementType</em></p> and any other custom metadata tags used in your project necessary for proper object translation.
+	 * 
+	 * <p>Also you will need to add the ArrayElementType metadata tags to your classes.</p>
 	 */
 	public class ClassUtil
 	{		
+		static private const ARRAY_ELEMENT_TYPE_METADATA:String = "ArrayElementType";
+		
+		static private const CLASS_UTIL_METADATA:String = "ClassUtil";
+		
 		/**
 		 * Creates a specified class instance from a generic object.
 		 * If the object is an XML instance, then it will utilize createClassFromXMLObject.
@@ -42,10 +52,6 @@ package appCoreLib.utils
 		 */
 		static public function createClassFromObject (obj:Object, targetClass:Class):Object
 		{
-			//if its an xml object we have a more optimized process to extract assembly the object
-			if (obj is XML)
-				return createClassFromXMLObject(obj as XML, targetClass);
-			
 			//otherwise we assemble the object normally
 			var classInstance:Object = new targetClass();
 			
@@ -76,92 +82,202 @@ package appCoreLib.utils
 			return classInstance;
 		}
 		
-		/**
-		 * Creates a specified class instance from an XML object. 
-		 *  
-		 * 
-		 * The XML object should implement the following structure:
-		 * <item>
-		 * 		<property name="id" type="String">widget_p486</property>
-		 * 		<property name="name" type="String">Widget P486</property>
-		 * 		
-		 * 		<!-- simple array elements -->
-		 * 		<property name="tags" type="Array" arrayElementType="String">flash,flex,actionscript</property>
-		 * 		
-		 * 		<!-- complex array elements -->
-		 * 		<property name="complexObjects" type="Array">
-		 * 			<item>
-		 * 				<property/>
-		 * 				<property/>
-		 * 			</item>
-		 * 			<item>
-		 * 				<property/>
-		 * 				<property/>
-		 * 			</item>
-		 * 		</property>
-		 * 		<property name="price" type="Number">22.95</property>
-		 * </item>
-		 * 
-		 * @param obj The XML object to translate into a class instance.
-		 * @param targetClass The class which the object is translated to.
-		 * 
-		 * @return * The class instance of the translated XML object.
-		 */
 		static public function createClassFromXMLObject (obj:XML, targetClass:Class):*
 		{
-			var classInstance:Object = new targetClass();
-			
+			if (!obj || obj.toXMLString() == "")
+				return null;
+				
+			var classInstance:* = new targetClass();
+				
 			var info:XML = describeType(classInstance);
 			var vars:XMLList = mergeXMLlists(info..variable, info..accessor);
 			
+			var arrayElementType:String;
 			var propName:String;
 			var propType:String;
+			var propValue:*;
 			
-			var arrayElementType:String;
+			var subItem:XML;
+			var subItems:XMLList;
+			var subItemClass:Class;
 			
-			var properties:XMLList = obj.property;
-			var prop:XML;
-			for each (prop in properties)
+			var item:XML;
+			for each (item in vars)
 			{
-				propName = String(prop.@name);
-				
-				//if this doesn't have the prop name then pass on it.
-				if (!classInstance.hasOwnProperty(propName))
+				if (String(item.@access) == "readonly")
 					continue;
 				
-				//if it's readonly then pass.
-				if (String(vars.(@name == propName).@access) == "readonly")
+				if (String(item.metadata.(@name == CLASS_UTIL_METADATA).arg.(@key == "ignore").@value) == "true")
 					continue;
 				
-				propType = String(vars.(@name == propName).@type);
+				propName = String(item.@name);
 				
-				// we could be passing nested XML items so we have to check the XML structure and proceed appropriately
-				if (prop.hasComplexContent())
+				if (obj.hasOwnProperty(propName) || obj[propName].length > 0)
 				{
-					if (propType.toLowerCase() == "array")
+					propType = String(item.@type);
+					
+					//handle complex data i.e. nestedNodes
+					if (obj[propName].hasComplexContent())
 					{
-						var a:Array = [];
-						
-						arrayElementType = String(vars.(@name == propName).metadata.(@name == "ArrayElementType").arg.(@key == "" || @key == "type").@value);
-						var itemClass:Class = getDefinitionByName(arrayElementType) as Class;
-						
-						var item:XML; //item to populate array
-						var items:XMLList = prop.item; //ilst of items to add to array
-						for each (item in items)
-							a.push(createClassFromXMLObject(item, itemClass));
+						//for complex arrays
+						if (propType.toLowerCase() == "array")
+						{
+							//first see if a specific type was designated via  [ClassUtil(type="some.specific.ClassType")]
+							if (String(item.metadata.(@name == CLASS_UTIL_METADATA).arg.(@key == "type").@value) != "")
+								arrayElementType = String(item.metadata.(@name == CLASS_UTIL_METADATA).arg.(@key == "type").@value);
 							
-						classInstance[propName] = a;
+							//next we will try to see if something was specified other than an interface
+							else if (String(item.metadata.(@name == ARRAY_ELEMENT_TYPE_METADATA).arg.(@key == "" || @key == "type").@value) != "")
+								arrayElementType = String(item.metadata.(@name == ARRAY_ELEMENT_TYPE_METADATA).arg.(@key == "" || @key == "type").@value);
+							
+							//chances are we haven't enough info or simply can't translate this subchild,
+							//though we could try to derive from the <ClassInstanceType/> node in the XML of the first element
+							else
+								continue;
+							
+							//we should have enough to recursively build the sub items.
+							var a:Array = [];
+							subItemClass = getDefinitionByName(arrayElementType) as Class;
+							subItems = obj[propName].elements();
+							for each (subItem in subItems)
+								a.push(createClassFromXMLObject(subItem, subItemClass));
+								
+							classInstance[propName] = a;
+						}
+						
+						//just a class instance for a property value.
+						else
+						{
+							//if the property type is an interface, it is necessary to specify an implementor class via the metadata.
+							//else it will fail to instantiate properly and throw an RTE
+							var t:String = String(item.metadata.(@name == CLASS_UTIL_METADATA).arg.(@key == "type").@value);
+							if (t != "") //for interfaces and/or where [ClassUtil(type="some.specific.ClassType")]
+								subItemClass = getDefinitionByName(t) as Class;
+								
+							else //just a regular class, no interface specified for casting.
+								subItemClass = getDefinitionByName(propType.replace("::", ".")) as Class;
+															
+							subItem = obj[propName].elements()[0]; //there should only be one element which itself is a XML object to be translated
+							
+							classInstance[propName] = createClassFromXMLObject(subItem, subItemClass);
+						}
 					}
+					
+					else
+					{
+						propValue = obj[propName];//will initially be an XMLList due to e4x syntax
+						if (propValue)
+							classInstance[propName] = customCast(propType, propValue);
+					}					
 				}
-				
-				else
-					classInstance[propName] = customCast(propType, prop);
 			}
 			
 			return classInstance;
-		}		
+		}
 		
 		/**
+		 * Creates an XML object from a target object.
+		 * 
+		 * @param obj The target object to translate into XML.
+		 * @param skipOnNullValues You can elect to not add XML nodes to the XML object if the target object's properties are null.
+		 * 
+		 * @return An XML object representation of the target object
+		 */
+		static public function createXMLfromObject (obj:Object, skipOnNullValues:Boolean = true):XML
+		{
+			var info:XML = describeType(obj);
+			var vars:XMLList = mergeXMLlists(info..variable, info..accessor);
+			
+			var objName:String = String(info.@name);
+			var classIndex:int = objName.indexOf("::");
+			objName = classIndex == -1? objName: objName.substring(classIndex + 2);
+			
+			var xmlObj:XML = XML("<" + objName + "/>");
+			var xmlProp:XML;
+			
+			var arrayElementType:String;
+			
+			var propName:String;
+			var propType:String;
+			var propValue:*;
+			
+			var item:XML;
+			for each (item in vars)
+			{
+				if (String(item.@access) == "readonly")
+					continue;
+				
+				if (String(item.metadata.(@name == CLASS_UTIL_METADATA).arg.(@key == "ignore").@value) == "true")
+					continue;
+				
+				propName = String(item.@name);
+				propType = String(item.@type);
+				propValue = obj[propName];
+				
+				if (propValue != null && propValue != undefined)
+				{
+					switch (propType.toLowerCase())
+					{
+						case "boolean":
+						case "string":
+						case "number": case "int": case "uint":
+						case "xml":
+						{
+							xmlProp = XML("<" + propName + ">" + propValue + "</" + propName + ">");
+							break;
+						}
+						
+						case "array":
+						{
+							if (propValue.length < 1)
+								continue;
+							
+							xmlProp = XML("<" + propName + "/>");
+							
+							arrayElementType = String(item.metadata.(@name == ARRAY_ELEMENT_TYPE_METADATA).arg.(@key == "" || @key == "type").@value);
+							if (arrayElementType.toLowerCase() == "" ||
+								arrayElementType.toLowerCase() == "string" ||
+								arrayElementType.toLowerCase() == "number" ||
+								arrayElementType.toLowerCase() == "int" ||
+								arrayElementType.toLowerCase() == "uint" ||
+								arrayElementType.toLowerCase() == "boolean")
+							{
+								xmlProp = XML("<" + propName + ">" + (obj[propName] as Array).toString() + "</" + propName + ">");
+							}
+							
+							else
+							{
+								var subItem:Object;
+								for each (subItem in obj[propName])
+									xmlProp.appendChild(createXMLfromObject(subItem));
+							}
+							
+							break;
+						}
+						
+						case "object":
+						default:
+						{
+							xmlProp = XML("<" + propName + ">" + createXMLfromObject(obj[propName]) + "</" + propName + ">");
+						}
+					}
+					
+					xmlObj.appendChild(xmlProp);
+				}
+				
+				else if (!propValue && !skipOnNullValues)
+				{
+					xmlProp = XML("<" + propName + "/>");
+					xmlObj.appendChild(xmlProp);
+				}
+			}
+			
+			return xmlObj;
+		}
+		
+		/**
+		 * Takes a value and cast to a specified type.
+		 * 
 		 * @param dataType The desired object type to translate the value to.
 		 * @param value The value to be cast.
 		 * 
@@ -228,6 +344,9 @@ package appCoreLib.utils
 			}
 		}
 		
+		/**
+		 * @private
+		 */
 		static private function mergeXMLlists (a:XMLList, b:XMLList):XMLList
 		{
 			var items:XML = <xml/>;
