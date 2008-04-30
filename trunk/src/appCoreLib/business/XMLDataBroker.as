@@ -150,15 +150,18 @@ package appCoreLib.business
 		protected function onComplete_xmlLoaderHandler (evt:Event):void
 		{
 			if (xmlLoader.data == undefined || StringUtil.trim(xmlLoader.data.toString()) == "")
-			{
-				dispatchEvent(new XMLLoadEvent(XMLLoadEvent.XML_LOAD_FAILURE));
-			}	
+				dispatchEvent(new XMLLoadEvent(XMLLoadEvent.XML_LOAD_FAILURE));	
+			
 			else
 			{
 				xmlData = new XML(xmlLoader.data);
 				isXMLLoaded = true;
 				
-				dispatchEvent(new XMLLoadEvent(XMLLoadEvent.XML_LOAD_SUCCESS));
+				var xmlEvt:XMLLoadEvent = new XMLLoadEvent(XMLLoadEvent.XML_LOAD_SUCCESS);
+				xmlEvt.data = xmlData;
+				xmlEvt.xml = xmlData;
+				
+				dispatchEvent(xmlEvt);
 			}
 		}
 		
