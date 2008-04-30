@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../print.css" type="text/css" media="print">
-<meta content="XMLLoadEvent,appCoreLib.events.XMLLoadEvent,XML_LOAD_FAILURE,XML_LOAD_SUCCESS,data" name="keywords">
+<meta content="XMLLoadEvent,appCoreLib.events.XMLLoadEvent,XML_LOAD_FAILURE,XML_LOAD_SUCCESS,data,xml" name="keywords">
 <title>appCoreLib.events.XMLLoadEvent</title>
 </head>
 <body>
@@ -56,6 +56,11 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#data">data</a> : XML<div class="summaryTableDescription">
+   This property has been deprecated.</div>
+</td><td class="summaryTableOwnerCol">XMLLoadEvent</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#xml">xml</a> : XML<div class="summaryTableDescription">
    The XML data associated with the XMLLoadEvent if the XML was successfully loaded.</div>
 </td><td class="summaryTableOwnerCol">XMLLoadEvent</td>
 </tr>
@@ -112,12 +117,29 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>data:XML</code>&nbsp;&nbsp;[read-write]<p>
+   This property has been deprecated.  Please use the xml property instead.
    The XML data associated with the XMLLoadEvent if the XML was successfully loaded.
    </p><span class="label">Implementation</span>
 <br>
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function get data():XML</code>
 <br>
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function set data(value:XML):void</code>
+<br>
+</div>
+<a name="xml"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">xml</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>xml:XML</code>&nbsp;&nbsp;[read-write]<p>
+   The XML data associated with the XMLLoadEvent if the XML was successfully loaded.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get xml():XML</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set xml(value:XML):void</code>
 <br>
 </div>
 <a name="constructorDetail"></a>

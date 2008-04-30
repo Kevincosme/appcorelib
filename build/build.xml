@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="${swc.name}" basedir="../" default="lib">
+<project name="${swc.name}" basedir="../" default="docs">
 
 	<!-- Define variables/paths used in this build script -->
 	<property file="./build/build.properties" />

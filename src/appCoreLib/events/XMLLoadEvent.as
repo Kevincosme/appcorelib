@@ -60,6 +60,34 @@ package appCoreLib.events
 		}
 		
 		///////////////////////////////////////////////////////////////
+		//	XML
+		///////////////////////////////////////////////////////////////
+		
+		/**
+		 * @private
+		 */
+		private var _xml:XML;
+		
+		/**
+		 * The XML data associated with the XMLLoadEvent if the XML was successfully loaded.
+		 */
+		public function get xml ():XML
+		{
+			return _xml;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set xml (value:XML):void
+		{
+			if (_xml != value)
+			{
+				_xml = value;
+			}
+		}
+		
+		///////////////////////////////////////////////////////////////
 		//	DATA
 		///////////////////////////////////////////////////////////////
 		
@@ -69,6 +97,7 @@ package appCoreLib.events
 		protected var xmlData:XML;
 		
 		/**
+		 * This property has been deprecated.  Please use the xml property instead.
 		 * The XML data associated with the XMLLoadEvent if the XML was successfully loaded.
 		 */
 		public function get data ():XML
