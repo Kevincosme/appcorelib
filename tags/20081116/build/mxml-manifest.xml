@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<componentPackage>
+	
+	<component 
+		id="XMLDataBroker" 
+		class="appCoreLib.business.XMLDataBroker"
+		/>
+	
+	<component 
+		id="Content" 
+		class="appCoreLib.business.Content"
+		/>
+	
+	<component 
+		id="Settings" 
+		class="appCoreLib.business.Settings"
+		/>
+		
+</componentPackage>
