@@ -66,8 +66,8 @@ package appCoreLib.business
 			{
 				xmlLoader = new URLLoader();
 				
-				xmlLoader.addEventListener(Event.COMPLETE, onComplete_xmlLoaderHandler, false, EventPriority.DEFAULT_HANDLER, true);
-				xmlLoader.addEventListener(IOErrorEvent.IO_ERROR, onIOError_xmlLoaderHandler, false, EventPriority.DEFAULT_HANDLER, true);
+				xmlLoader.addEventListener(Event.COMPLETE, onComplete_xmlLoaderHandler, false, EventPriority.DEFAULT_HANDLER, false);
+				xmlLoader.addEventListener(IOErrorEvent.IO_ERROR, onIOError_xmlLoaderHandler, false, EventPriority.DEFAULT_HANDLER, false);
 			}
 			
 			xmlLoader.load(new URLRequest(source));

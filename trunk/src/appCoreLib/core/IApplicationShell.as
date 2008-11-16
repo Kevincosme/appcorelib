@@ -28,9 +28,11 @@ package appCoreLib.core
 	/**
 	 * IApplicationShell provided a single method for letting the application know that its assets have been loaded and can now load visual content.
 	 * The Application level class will implement this interface.
+	 * 
+	 * @param evt An optional parameter to allow for direct handling of certain application initialization events.
 	 */
 	public interface IApplicationShell
 	{
-		function shellInitialized ():void
+		function shellInitialized (evt:Event = null):void
 	}
 }
